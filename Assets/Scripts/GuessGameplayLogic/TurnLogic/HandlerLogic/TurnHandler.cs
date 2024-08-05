@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GuessGameplayLogic.GuessLogic.ListLogic;
 using GuessGameplayLogic.TurnLogic.EntityLogic;
 using GuessGameplayLogic.ValidatorLogic;
 using Infrastructure.GameStateLogic;
@@ -14,13 +15,13 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
         
         private IGameValidator _gameValidator;
         private IGameStateMachine _gameStateMachine;
+        private GuessesListViewModel _guessesListViewModel;
 
         private List<TurnEntity> _entities;
 
         private TurnEntity _currentTurnEntity;
         private int _currentTurnEntityIndex;
-
-
+        
         public TurnHandler()
         {
             OnWinnerDetermined = new ReactiveCommand<TurnEntity>();
@@ -32,6 +33,7 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
         {
             _gameValidator = container.Resolve<IGameValidator>();
             _gameStateMachine = container.Resolve<IGameStateMachine>();
+            _guessesListViewModel = container.Resolve<GuessesListViewModel>();
         }
 
         public void AddEntity(TurnEntity entity)
@@ -54,11 +56,12 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
             if (result.Status == NumberStatus.Correct)
             {
                 OnWinnerDetermined?.Execute(_currentTurnEntity);
-                
                 _gameStateMachine.SwitchState(GameState.Debriefing);
             }
             else
             {
+                _guessesListViewModel.Add(result);
+                
                 _currentTurnEntityIndex = GetNextTurnEntityIndex();
                 PassTurn(_currentTurnEntityIndex);
             }

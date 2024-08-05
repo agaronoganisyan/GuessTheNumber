@@ -1,25 +1,30 @@
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
-using UnityEngine;
+using UniRx;
 using Zenject;
 
-namespace GuessGameplayLogic.InputFieldLogic
+namespace GuessGameplayLogic.InputFieldLogic.SenderLogic
 {
-    public class InputFieldSenderView : MonoBehaviour
+    public class InputFieldSenderViewModel
     {
+        public ReactiveCommand OnSended { get; }
+
         private ITurnHandler _turnHandler;
         private InputFieldViewModel _inputFieldViewModel;
         
-        [Inject]
-        public virtual void Construct(DiContainer container)
+        public InputFieldSenderViewModel(DiContainer container)
         {
             _turnHandler = container.Resolve<ITurnHandler>();
             _inputFieldViewModel = container.Resolve<InputFieldViewModel>();
+
+            OnSended = new ReactiveCommand();
         }
 
-        public void OnSend()
+        public void Send()
         {
             _turnHandler.MakeTurn(int.Parse(_inputFieldViewModel.Input.Value));
             _inputFieldViewModel.Remove();
+
+            OnSended?.Execute();
         }
     }
 }

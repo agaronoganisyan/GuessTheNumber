@@ -1,4 +1,7 @@
 using Cysharp.Threading.Tasks;
+using GuessGameplayLogic.GuessLogic.FactoryLogic;
+using GuessGameplayLogic.GuessLogic.ListLogic;
+using GuessGameplayLogic.NumberButtonLogic.ListLogic;
 using GuessGameplayLogic.NumberGeneratorLogic;
 using GuessGameplayLogic.TurnLogic.EntityLogic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
@@ -12,11 +15,17 @@ namespace Infrastructure.GameStateLogic
     {
         private INumberGenerator _numberGenerator;
         private ITurnHandler _turnHandler;
+        private GuessesListViewModel _guessesListViewModel;
+        private IGuessFactory _guessFactory;
+        private NumberButtonsListViewModel _numberButtonsListViewModel;
         
         public Gameplay(IStateMachine<GameState> stateMachine, DiContainer container) : base(stateMachine,container)
         {
             _numberGenerator = container.Resolve<INumberGenerator>();
             _turnHandler = container.Resolve<ITurnHandler>();
+            _guessesListViewModel = container.Resolve<GuessesListViewModel>();
+            _guessFactory = container.Resolve<IGuessFactory>();
+            _numberButtonsListViewModel = container.Resolve<NumberButtonsListViewModel>();
         }
         
         public override async UniTask Enter()
@@ -24,9 +33,14 @@ namespace Infrastructure.GameStateLogic
             if (!_isSetuped)
             {
                 _turnHandler.Setup(_container);
+                _numberButtonsListViewModel.Setup();
                 
                 _isSetuped = true;
             }
+
+            await _guessFactory.Setup();
+            
+            _guessesListViewModel.Setup();
             
             _numberGenerator.Generate();
             
@@ -41,6 +55,7 @@ namespace Infrastructure.GameStateLogic
         public override async UniTask Exit()
         {
             _turnHandler.Cleanup();
+            _guessFactory.ReturnAllBack();
         }
     }
 }

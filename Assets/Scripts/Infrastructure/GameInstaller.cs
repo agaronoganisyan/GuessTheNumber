@@ -1,4 +1,8 @@
+using GuessGameplayLogic.GuessLogic;
+using GuessGameplayLogic.GuessLogic.FactoryLogic;
+using GuessGameplayLogic.GuessLogic.ListLogic;
 using GuessGameplayLogic.InputFieldLogic;
+using GuessGameplayLogic.InputFieldLogic.SenderLogic;
 using GuessGameplayLogic.NumberButtonLogic.ListLogic;
 using GuessGameplayLogic.NumberGeneratorLogic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
@@ -34,10 +38,19 @@ namespace Infrastructure
             Container.Bind<IGameValidator>().To<GameValidator>().FromNew().AsSingle();
             Container.Bind<INumberGenerator>().To<NumberGenerator>().FromNew().AsSingle();
 
+            Container.Bind<ObjectPool<GuessView>>().FromNew().AsTransient();
+            Container.Bind<GuessViewFactory<GuessView>>().FromNew().AsTransient();
+
+            Container.Bind<IGuessFactory>().To<GuessFactory>().FromNew().AsSingle();
+            Container.Bind<GuessesListViewModel>().FromNew().AsSingle();
+
             Container.Bind<InputFieldModel>().FromNew().AsSingle();
             Container.Bind<InputFieldViewModel>().FromNew().AsSingle();
             
             Container.Bind<NumberButtonsListViewModel>().FromNew().AsSingle();
+
+            
+            Container.Bind<InputFieldSenderViewModel>().FromNew().AsSingle();
 
             Container.Bind<GameConfig>().FromInstance(_gameConfig).AsSingle();
             

@@ -29,6 +29,10 @@ MonoBehaviour:
     m_Address: CanvasView_Lobby
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: ddd69496cc1714a14984a52a731f5f18
+    m_Address: GuessView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: df3987baaeaf247df8995b89153153a9, type: 2}
   m_SchemaSet:
