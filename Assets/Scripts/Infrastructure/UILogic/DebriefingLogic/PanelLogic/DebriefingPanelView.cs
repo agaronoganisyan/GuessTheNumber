@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Infrastructure.UILogic.DebriefingLogic.PanelLogic
@@ -10,7 +10,7 @@ namespace Infrastructure.UILogic.DebriefingLogic.PanelLogic
     {
         private DebriefingPanelViewModel _viewModel;
         
-        [SerializeField] private TextMeshProUGUI[] _wordTexts;
+        [FormerlySerializedAs("_winnerNameTexts")] [SerializeField] private TextMeshProUGUI _winnerNameText;
 
         private CompositeDisposable _disposable;
         
@@ -22,6 +22,18 @@ namespace Infrastructure.UILogic.DebriefingLogic.PanelLogic
             _disposable = new CompositeDisposable();
         }
         
+        private void Start()
+        {
+            _viewModel.OnDisplayWinnerName.Subscribe((value) => DisplayWinnerName(value)).AddTo(_disposable);
+
+            DisplayWinnerName(_viewModel.GetWinnerName());
+        }
+
+        private void DisplayWinnerName(string name)
+        {
+            _winnerNameText.text = name;
+        }
+
         public void OnToLobby()
         {
             _viewModel.ToLobby();
