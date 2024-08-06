@@ -7,8 +7,8 @@ namespace GuessGameplayLogic.GuessLogic.ListLogic
 {
     public class GuessesListViewModel
     {
-        public ReactiveCommand<List<GuessViewModel>> OnSetuped;
-        public ReactiveCommand<List<GuessViewModel>> OnExtended;
+        public ReactiveCommand<List<GuessViewModel>> OnSetuped { get; }
+        public ReactiveCommand<List<GuessViewModel>> OnExtended { get; }
 
         private List<GuessViewModel> _guesses;
 

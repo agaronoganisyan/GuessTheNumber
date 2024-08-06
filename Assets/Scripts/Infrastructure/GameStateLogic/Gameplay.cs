@@ -35,7 +35,6 @@ namespace Infrastructure.GameStateLogic
             if (!_isSetuped)
             {
                 _turnHandler.Setup(_container);
-                _numberButtonsListViewModel.Setup();
                 
                 _isSetuped = true;
             }

@@ -5,8 +5,9 @@ namespace GuessGameplayLogic.InputFieldLogic
 {
     public class InputFieldViewModel
     {
-        private InputFieldModel _model;
         public ReactiveProperty<string> Input { get; }
+        
+        private InputFieldModel _model;
 
         private CompositeDisposable _disposable;
         

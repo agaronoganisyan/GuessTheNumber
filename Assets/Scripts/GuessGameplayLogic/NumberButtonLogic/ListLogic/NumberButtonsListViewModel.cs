@@ -17,10 +17,7 @@ namespace GuessGameplayLogic.NumberButtonLogic.ListLogic
 
             OnShuffleButtons = new ReactiveCommand();
             _disposable = new CompositeDisposable();
-        }
-
-        public void Setup()
-        {
+            
             _inputFieldSenderViewModel.OnSended.Subscribe((value) => OnShuffleButtons?.Execute()).AddTo(_disposable);
         }
     }
