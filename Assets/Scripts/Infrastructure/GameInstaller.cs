@@ -1,12 +1,14 @@
 using GuessGameplayLogic.GuessLogic;
 using GuessGameplayLogic.GuessLogic.FactoryLogic;
 using GuessGameplayLogic.GuessLogic.ListLogic;
+using GuessGameplayLogic.GuessLogic.ValidatorLogic;
 using GuessGameplayLogic.InputFieldLogic;
 using GuessGameplayLogic.InputFieldLogic.SenderLogic;
 using GuessGameplayLogic.NumberButtonLogic.ListLogic;
 using GuessGameplayLogic.NumberGeneratorLogic;
+using GuessGameplayLogic.TurnLogic.EntityLogic;
+using GuessGameplayLogic.TurnLogic.EntityLogic.ProviderLogic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
-using GuessGameplayLogic.ValidatorLogic;
 using Infrastructure.AssetManagementLogic;
 using Infrastructure.GameStateLogic;
 using Infrastructure.PoolLogic;
@@ -33,26 +35,28 @@ namespace Infrastructure
             Container.Bind<IGameStateMachine>().To<GameStateMachine>().FromNew().AsSingle();
             Container.Bind<IUIFactory>().To<UIFactory>().FromNew().AsSingle();
             Container.Bind<IUIStateMachine>().To<UIStateMachine>().FromNew().AsSingle();
-            
-            Container.Bind<ITurnHandler>().To<TurnHandler>().FromNew().AsSingle();
-            Container.Bind<IGameValidator>().To<GameValidator>().FromNew().AsSingle();
+            Container.Bind<IGuessValidator>().To<GuessValidator>().FromNew().AsSingle();
             Container.Bind<INumberGenerator>().To<NumberGenerator>().FromNew().AsSingle();
+            Container.Bind<GameConfig>().FromInstance(_gameConfig).AsSingle();
 
+            //Turn
+            Container.Bind<ITurnEntitiesProvider>().To<TurnEntitiesProvider>().FromNew().AsSingle();
+            Container.Bind<ITurnHandler>().To<TurnHandler>().FromNew().AsSingle();
+            Container.Bind<TurnEntitiesModel>().FromNew().AsSingle();
+
+            //Guess
             Container.Bind<ObjectPool<GuessView>>().FromNew().AsTransient();
-            Container.Bind<GuessViewFactory<GuessView>>().FromNew().AsTransient();
-
+            Container.Bind<GuessViewFactory>().FromNew().AsTransient();
             Container.Bind<IGuessFactory>().To<GuessFactory>().FromNew().AsSingle();
             Container.Bind<GuessesListViewModel>().FromNew().AsSingle();
 
+            //InputField
             Container.Bind<InputFieldModel>().FromNew().AsSingle();
             Container.Bind<InputFieldViewModel>().FromNew().AsSingle();
-            
-            Container.Bind<NumberButtonsListViewModel>().FromNew().AsSingle();
-
-            
             Container.Bind<InputFieldSenderViewModel>().FromNew().AsSingle();
 
-            Container.Bind<GameConfig>().FromInstance(_gameConfig).AsSingle();
+            //NumberButton
+            Container.Bind<NumberButtonsListViewModel>().FromNew().AsSingle();
             
             //Canvases
             Container.Bind<LobbyCanvasViewModel>().FromNew().AsSingle();

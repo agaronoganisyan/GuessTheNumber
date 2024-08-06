@@ -8,7 +8,7 @@ namespace GuessGameplayLogic.TurnLogic.EntityLogic
         {
         }
 
-        public override void MakeTurn()
+        public override void MakeGuess()
         {
             //если дальше развивать проект, то здесь надо будет добавить через ViewModel активацию UI для ввода чисел игроком 
         }

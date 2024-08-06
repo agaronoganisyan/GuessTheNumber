@@ -1,6 +1,6 @@
+using GuessGameplayLogic.GuessLogic;
 using GuessGameplayLogic.NumberGeneratorLogic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
-using GuessGameplayLogic.ValidatorLogic;
 using UnityEngine;
 using Zenject;
 
@@ -24,10 +24,10 @@ namespace GuessGameplayLogic.TurnLogic.EntityLogic
             _upperBound = _gameConfig.MaxNumberValue;
         }
 
-        public override void MakeTurn()
+        public override void MakeGuess()
         {
             _currentGuess = (_lowerBound + _upperBound) / 2;
-            NumberStatus status = _turnHandler.MakeTurn(_currentGuess);
+            NumberStatus status = _turnHandler.MakeGuess(_currentGuess);
             switch (status)
             {
                 case NumberStatus.Lower:

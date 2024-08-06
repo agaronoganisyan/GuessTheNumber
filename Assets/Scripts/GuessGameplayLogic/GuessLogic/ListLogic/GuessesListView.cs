@@ -55,8 +55,8 @@ namespace GuessGameplayLogic.GuessLogic.ListLogic
                 if (!_guessesInList.Contains(guesses[i]))
                 {
                     GuessView view = _guessViewFactory.Get(guesses[i]);
-                    view.transform.SetParent(_container); //намеренно добавлено, потому что иначе какой-то глюк c UniRx 
-                    view.GetComponent<RectTransform>().anchoredPosition = origin; //при размещении первого элемента
+                    view.RectTransform.SetParent(_container); //намеренно добавлено, потому что иначе какой-то глюк c UniRx 
+                    view.RectTransform.anchoredPosition = origin; //при размещении первого элемента
                     
                     guesses[i].SetParentAndPosition(_container, origin);
                     

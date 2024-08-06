@@ -11,6 +11,6 @@ namespace GuessGameplayLogic.TurnLogic.EntityLogic
             Name = name;
         }
 
-        public abstract void MakeTurn();
+        public abstract void MakeGuess();
     }
 }

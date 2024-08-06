@@ -9,7 +9,7 @@ namespace GuessGameplayLogic.GuessLogic.FactoryLogic
         public ReactiveCommand OnSetuped { get; private set; }
         private bool _isSetuped;
 
-        private GuessViewFactory<GuessView> _viewFactory;
+        private GuessViewFactory _viewFactory;
         
         private const string _address = "GuessView";
 
@@ -17,7 +17,7 @@ namespace GuessGameplayLogic.GuessLogic.FactoryLogic
         {
             OnSetuped = new ReactiveCommand();
             
-            _viewFactory = container.Resolve<GuessViewFactory<GuessView>>();
+            _viewFactory = container.Resolve<GuessViewFactory>();
         }
 
         public async UniTask Setup()

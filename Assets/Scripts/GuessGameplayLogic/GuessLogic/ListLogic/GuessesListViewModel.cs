@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
-using GuessGameplayLogic.ValidatorLogic;
 using UniRx;
 using Zenject;
 
@@ -27,10 +26,10 @@ namespace GuessGameplayLogic.GuessLogic.ListLogic
             OnSetuped?.Execute(_guesses);
         }
 
-        public void Add(ValidationResult result)
+        public void Add(GuessModel guess)
         {
-            GuessViewModel guess = new GuessViewModel(new GuessModel(result.Owner, result.Number, result.Status));
-            _guesses.Add(guess);
+            GuessViewModel guessViewModel = new GuessViewModel(guess);
+            _guesses.Add(guessViewModel);
 
             OnExtended?.Execute(_guesses);
         }

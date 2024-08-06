@@ -21,7 +21,9 @@ namespace GuessGameplayLogic.InputFieldLogic.SenderLogic
 
         public void Send()
         {
-            _turnHandler.MakeTurn(int.Parse(_inputFieldViewModel.Input.Value));
+            if (!int.TryParse(_inputFieldViewModel.Input.Value, out int value)) return;
+            
+            _turnHandler.MakeGuess(value);
             _inputFieldViewModel.Remove();
 
             OnSended?.Execute();

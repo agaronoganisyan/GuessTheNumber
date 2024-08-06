@@ -1,27 +1,25 @@
 using GuessGameplayLogic.NumberGeneratorLogic;
-using GuessGameplayLogic.TurnLogic.EntityLogic;
-using UniRx;
 using Zenject;
 
-namespace GuessGameplayLogic.ValidatorLogic
+namespace GuessGameplayLogic.GuessLogic.ValidatorLogic
 {
-    public class GameValidator : IGameValidator
+    public class GuessValidator : IGuessValidator
     {
         private INumberGenerator _numberGenerator;
 
-        public GameValidator(DiContainer container)
+        public GuessValidator(DiContainer container)
         {
             _numberGenerator = container.Resolve<INumberGenerator>();
         }
 
-        public ValidationResult Validate(TurnEntity turnEntity, int number)
+        public NumberStatus Validate(GuessModel guessModel)
         {
-            ValidationResult result = new ValidationResult(turnEntity.Name, number, GetNumberStatus(number));
-            
-            return result;
+            NumberStatus status = GetNumberStatus(guessModel.NumberValue);
+            guessModel.SetStatus(status);
+                
+            return status;
         }
         
-
         private NumberStatus GetNumberStatus(int number)
         {
             NumberStatus status = NumberStatus.None;

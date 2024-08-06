@@ -20,7 +20,7 @@ namespace GuessGameplayLogic.NumberGeneratorLogic
         public void Generate()
         {
             GeneratedNumber = _random.Next(0, _gameConfig.MaxNumberValue + 1);
-            Debug.Log($"GeneratedNumber {GeneratedNumber}");
+            Debug.Log($"Generated number: {GeneratedNumber}");
         }
     }
 }

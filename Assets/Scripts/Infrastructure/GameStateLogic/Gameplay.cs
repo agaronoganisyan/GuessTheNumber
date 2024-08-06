@@ -3,7 +3,7 @@ using GuessGameplayLogic.GuessLogic.FactoryLogic;
 using GuessGameplayLogic.GuessLogic.ListLogic;
 using GuessGameplayLogic.NumberButtonLogic.ListLogic;
 using GuessGameplayLogic.NumberGeneratorLogic;
-using GuessGameplayLogic.TurnLogic.EntityLogic;
+using GuessGameplayLogic.TurnLogic.EntityLogic.ProviderLogic;
 using GuessGameplayLogic.TurnLogic.HandlerLogic;
 using Infrastructure.StateMachineLogic;
 using Infrastructure.UILogic.UIStateMachineLogic;
@@ -18,6 +18,7 @@ namespace Infrastructure.GameStateLogic
         private GuessesListViewModel _guessesListViewModel;
         private IGuessFactory _guessFactory;
         private NumberButtonsListViewModel _numberButtonsListViewModel;
+        private ITurnEntitiesProvider _turnEntitiesProvider;
         
         public Gameplay(IStateMachine<GameState> stateMachine, DiContainer container) : base(stateMachine,container)
         {
@@ -26,6 +27,7 @@ namespace Infrastructure.GameStateLogic
             _guessesListViewModel = container.Resolve<GuessesListViewModel>();
             _guessFactory = container.Resolve<IGuessFactory>();
             _numberButtonsListViewModel = container.Resolve<NumberButtonsListViewModel>();
+            _turnEntitiesProvider = container.Resolve<ITurnEntitiesProvider>();
         }
         
         public override async UniTask Enter()
@@ -39,13 +41,10 @@ namespace Infrastructure.GameStateLogic
             }
 
             await _guessFactory.Setup();
-            
             _guessesListViewModel.Setup();
-            
+
             _numberGenerator.Generate();
-            
-            _turnHandler.AddEntity(new Player("Player", _container));
-            _turnHandler.AddEntity(new AI("AI", _container));
+            _turnEntitiesProvider.Provide();
             
             _turnHandler.Start();
             
@@ -54,7 +53,6 @@ namespace Infrastructure.GameStateLogic
 
         public override async UniTask Exit()
         {
-            _turnHandler.Cleanup();
             _guessFactory.ReturnAllBack();
         }
     }

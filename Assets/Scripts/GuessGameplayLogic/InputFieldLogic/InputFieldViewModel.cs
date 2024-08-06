@@ -5,29 +5,29 @@ namespace GuessGameplayLogic.InputFieldLogic
 {
     public class InputFieldViewModel
     {
-        public InputFieldModel Model { get; }
+        private InputFieldModel _model;
         public ReactiveProperty<string> Input { get; }
 
         private CompositeDisposable _disposable;
         
         public InputFieldViewModel(DiContainer container)
         {
-            Model = container.Resolve<InputFieldModel>();
+            _model = container.Resolve<InputFieldModel>();
 
             Input = new ReactiveProperty<string>();
             _disposable = new CompositeDisposable();
 
-            Model.Input.Subscribe((value) => Input.Value = value).AddTo(_disposable);
+            _model.Input.Subscribe((value) => Input.Value = value).AddTo(_disposable);
         }
 
         public void Remove()
         {
-            Model.Remove();
+            _model.Remove();
         }
 
         public void AddNumber(int number)
         {
-            Model.AddNumber(number);
+            _model.AddNumber(number);
         }
     }
 }

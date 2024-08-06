@@ -26,7 +26,7 @@ namespace GuessGameplayLogic.NumberButtonLogic.ListLogic
 
         private void Start()
         {
-            _viewModel.OnSuffleButtons.Subscribe((value) => Shuffle()).AddTo(_disposable);
+            _viewModel.OnShuffleButtons.Subscribe((value) => Shuffle()).AddTo(_disposable);
             
             for (int i = 0; i < _buttons.Length; i++)
             {
@@ -43,9 +43,9 @@ namespace GuessGameplayLogic.NumberButtonLogic.ListLogic
 
                 if (i != j)
                 {
-                    Vector3 temp = _buttons[i].transform.position;
-                    _buttons[i].transform.position = _buttons[j].transform.position;
-                    _buttons[j].transform.position = temp;
+                    Vector2 temp = _buttons[i].RectTransform.anchoredPosition;
+                    _buttons[i].RectTransform.anchoredPosition = _buttons[j].RectTransform.anchoredPosition;
+                    _buttons[j].RectTransform.anchoredPosition = temp;
                 }
             }
         }

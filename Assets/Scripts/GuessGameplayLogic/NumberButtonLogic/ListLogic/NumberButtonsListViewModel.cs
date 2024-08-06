@@ -6,7 +6,7 @@ namespace GuessGameplayLogic.NumberButtonLogic.ListLogic
 {
     public class NumberButtonsListViewModel
     {
-        public ReactiveCommand OnSuffleButtons { get; }
+        public ReactiveCommand OnShuffleButtons { get; }
 
         private InputFieldSenderViewModel _inputFieldSenderViewModel;
 
@@ -15,13 +15,13 @@ namespace GuessGameplayLogic.NumberButtonLogic.ListLogic
         {
             _inputFieldSenderViewModel = container.Resolve<InputFieldSenderViewModel>();
 
-            OnSuffleButtons = new ReactiveCommand();
+            OnShuffleButtons = new ReactiveCommand();
             _disposable = new CompositeDisposable();
         }
 
         public void Setup()
         {
-            _inputFieldSenderViewModel.OnSended.Subscribe((value) => OnSuffleButtons?.Execute()).AddTo(_disposable);
+            _inputFieldSenderViewModel.OnSended.Subscribe((value) => OnShuffleButtons?.Execute()).AddTo(_disposable);
         }
     }
 }

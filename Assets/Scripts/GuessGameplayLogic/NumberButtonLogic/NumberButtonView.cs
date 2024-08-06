@@ -9,6 +9,9 @@ namespace GuessGameplayLogic.NumberButtonLogic
     {
         private InputFieldViewModel _inputFieldViewModel;
         
+        public RectTransform RectTransform => _rectTransform;
+        private RectTransform _rectTransform;
+        
         [SerializeField] private TextMeshProUGUI _numberText;
         
         private int _numberValue;
@@ -17,6 +20,8 @@ namespace GuessGameplayLogic.NumberButtonLogic
         private void Construct(DiContainer container)
         {
             _inputFieldViewModel = container.Resolve<InputFieldViewModel>();
+
+            _rectTransform = GetComponent<RectTransform>();
         }
         
         public void Setup(int number)

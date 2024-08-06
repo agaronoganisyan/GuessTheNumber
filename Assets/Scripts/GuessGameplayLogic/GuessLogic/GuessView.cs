@@ -1,5 +1,4 @@
 using System;
-using GuessGameplayLogic.ValidatorLogic;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -9,12 +8,13 @@ namespace GuessGameplayLogic.GuessLogic
     public class GuessView : MonoBehaviour, Infrastructure.PoolLogic.IPoolable<GuessView>
     {
         private GuessViewModel _viewModel;
-        
+
+        public RectTransform RectTransform => _rectTransform;
+        private RectTransform _rectTransform;
         [SerializeField] private TextMeshProUGUI _guessOwnerText;
         [SerializeField] private TextMeshProUGUI _guessValueText;
         [SerializeField] private RectTransform _indicator;
-        private RectTransform _rectTransform;
-        
+
         private CompositeDisposable _disposable;
         
         private Action<GuessView> _returnToPool;

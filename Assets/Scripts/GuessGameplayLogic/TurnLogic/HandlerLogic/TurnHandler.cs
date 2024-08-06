@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using GuessGameplayLogic.GuessLogic;
 using GuessGameplayLogic.GuessLogic.ListLogic;
+using GuessGameplayLogic.GuessLogic.ValidatorLogic;
 using GuessGameplayLogic.TurnLogic.EntityLogic;
-using GuessGameplayLogic.ValidatorLogic;
 using Infrastructure.GameStateLogic;
 using UniRx;
 using UnityEngine;
@@ -12,33 +13,26 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
     public class TurnHandler : ITurnHandler
     {
         public ReactiveCommand<TurnEntity> OnWinnerDetermined { get; }
-        
-        private IGameValidator _gameValidator;
+
+        private TurnEntitiesModel _turnEntitiesModel;
+        private IGuessValidator _guessValidator;
         private IGameStateMachine _gameStateMachine;
         private GuessesListViewModel _guessesListViewModel;
-
-        private List<TurnEntity> _entities;
-
+        
         private TurnEntity _currentTurnEntity;
         private int _currentTurnEntityIndex;
         
         public TurnHandler()
         {
             OnWinnerDetermined = new ReactiveCommand<TurnEntity>();
-            
-            _entities = new List<TurnEntity>();
         }
 
         public void Setup(DiContainer container)
         {
-            _gameValidator = container.Resolve<IGameValidator>();
+            _guessValidator = container.Resolve<IGuessValidator>();
             _gameStateMachine = container.Resolve<IGameStateMachine>();
             _guessesListViewModel = container.Resolve<GuessesListViewModel>();
-        }
-
-        public void AddEntity(TurnEntity entity)
-        {
-            _entities.Add(entity);
+            _turnEntitiesModel = container.Resolve<TurnEntitiesModel>();
         }
 
         public void Start()
@@ -47,31 +41,25 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
             PassTurn(_currentTurnEntityIndex);
         }
 
-        public NumberStatus MakeTurn(int number)
+        public NumberStatus MakeGuess(int number)
         {
-            Debug.Log($"MakeTurn {number}");
-            
-            ValidationResult result = _gameValidator.Validate(_currentTurnEntity, number);
+            GuessModel guessModel = new GuessModel(_currentTurnEntity.Name, number);
+            NumberStatus status = _guessValidator.Validate(guessModel);
 
-            if (result.Status == NumberStatus.Correct)
+            if (status == NumberStatus.Correct)
             {
                 OnWinnerDetermined?.Execute(_currentTurnEntity);
                 _gameStateMachine.SwitchState(GameState.Debriefing);
             }
             else
             {
-                _guessesListViewModel.Add(result);
+                _guessesListViewModel.Add(guessModel);
                 
                 _currentTurnEntityIndex = GetNextTurnEntityIndex();
                 PassTurn(_currentTurnEntityIndex);
             }
-            
-            return result.Status;
-        }
-        
-        public void Cleanup()
-        {
-            _entities.Clear();
+
+            return status;
         }
 
         public TurnEntity GetCurrentTurnEntity()
@@ -82,15 +70,15 @@ namespace GuessGameplayLogic.TurnLogic.HandlerLogic
         private int GetNextTurnEntityIndex()
         {
             int nextIndex = _currentTurnEntityIndex + 1;
-            if (nextIndex >= _entities.Count) nextIndex = 0;
+            if (nextIndex >= _turnEntitiesModel.Entities.Count) nextIndex = 0;
 
             return nextIndex;
         }
 
         private void PassTurn(int index)
         {
-            _currentTurnEntity = _entities[index];
-            _currentTurnEntity.MakeTurn();
+            _currentTurnEntity = _turnEntitiesModel.Entities[index];
+            _currentTurnEntity.MakeGuess();
         }
     }
 }
